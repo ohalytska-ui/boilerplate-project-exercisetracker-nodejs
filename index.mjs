@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import usersRoutes from "./routes/users.mjs";
 import exercisesRoutes from "./routes/exercise.mjs";
+import logsRoutes from "./routes/logs.mjs";
 
 // server port
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(usersRoutes);
 app.use(exercisesRoutes);
+app.use(logsRoutes);
 
 // root endpoint
 app.get('/', (req, res) => {
@@ -24,10 +26,10 @@ app.get('/', (req, res) => {
 });
 
 // default response for any other request
-app.get('*', (req, res) => {
-  res.status(404).json({"error":"Not fount"});
-  console.log("Not fount");
-});
+// app.get('*', (req, res) => {
+//   res.status(404).json({"error":"Not fount"});
+//   console.log("Not fount");
+// });
 
 const listener = app.listen(PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port)
