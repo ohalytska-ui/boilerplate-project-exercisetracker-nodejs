@@ -21,8 +21,8 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
     errors.push("No duration specified!");
   }
   if (errors.length){
-      res.status(400).json({"error":errors.join(",")});
-      console.error(err.message);
+    res.status(400).json({"error":errors.join(",")});
+    console.error(errors);
   }
   if(req.params._id){
     const select = "SELECT * FROM users where _id = ?";
@@ -56,7 +56,7 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
       
         const insert = "INSERT INTO exercises (_id, username, description, duration, date) VALUES (?,?,?,?,?)";
         const params =[data._id, data.username, data.description, data.duration, data.date];
-        db.run(insert, params, function (err, result) {
+        db.run(insert, params, function (err, res) {
           if (err){
             res.status(400).json({"error": err.message});
             console.error(err.message);

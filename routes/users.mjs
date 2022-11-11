@@ -35,8 +35,8 @@ usersRoutes.route("/api/users").post((req, res) => {
     errors.push("No username specified!");
   }
   if (errors.length){
-      res.status(400).json({"error":errors.join(",")});
-      console.error(err.message);
+    res.status(400).json({"error":errors.join(",")});
+    console.error(errors);
   }
 
   const data = {
@@ -46,7 +46,8 @@ usersRoutes.route("/api/users").post((req, res) => {
 
   const insert = "INSERT INTO users (_id, username) VALUES (?,?)";
   const params =[data._id, data.username];
-  db.run(insert, params, function (err, result) {
+  
+  db.run(insert, params, function (err, res) {
     if (err){
       res.status(400).json({"error": err.message});
       console.error(err.message);
