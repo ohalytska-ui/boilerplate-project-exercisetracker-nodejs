@@ -41,7 +41,7 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
             }
             res.json(dataNoLogs);
           }
-          else if(limit <= 0 || limit > exercisesRow.length || limit === undefined) {
+          else if(limit <= 0 || limit > exercisesRow.length) {
             res.status(400).json({"error":"Wrong limit"});
             console.error("Wrong limit");
           }
@@ -60,9 +60,9 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
                 duration: exerciseRow.duration,
                 date: new Date(exerciseRow.date).toDateString(),
               }));
-              if(logs.length > limit) {
-                logs = logs.slice(0, limit);
-              }
+              // if(logs.length > limit) {
+              //   logs = logs.slice(0, limit);
+              // }
               let data = {
                 _id: row._id,
                 username: row.username,
