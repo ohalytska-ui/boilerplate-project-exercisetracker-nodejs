@@ -66,6 +66,8 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
               let data = {
                 _id: row._id,
                 username: row.username,
+                from: new Date(from).toDateString(),
+                to: new Date(to).toDateString(),
                 count: logs.length,
                 log: logs,
               }
