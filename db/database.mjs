@@ -24,7 +24,7 @@ db.run("CREATE TABLE IF NOT EXISTS users (_id TEXT PRIMARY KEY, username text)",
 });
 
 // create exercises table
-db.run("CREATE TABLE IF NOT EXISTS exercises (_id TEXT, username text, description text, duration INTEGER, date text)", (err) => {
+db.run("CREATE TABLE IF NOT EXISTS exercises (_id TEXT, username text, description text, duration INTEGER, date Date)", (err) => {
   if (err) {
     // cannot open table
     console.error(err);

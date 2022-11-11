@@ -43,6 +43,14 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
           username: row.username,
           description: req.body.description,
           duration: Number(req.body.duration),
+          date: req.body?.date ? new Date(req.body?.date).toISOString() : new Date().toISOString(),
+        }
+
+        const resData = {
+          _id: req.params._id,
+          username: row.username,
+          description: req.body.description,
+          duration: Number(req.body.duration),
           date: req.body?.date ? new Date(req.body?.date).toDateString() : new Date().toDateString(),
         }
       
@@ -53,7 +61,7 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
             res.status(400).json({"error": err.message});
             console.error(err.message);
           }
-          res.json(data);
+          res.json(resData);
         });
       }
     });
