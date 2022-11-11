@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
 
 // default response for any other request
 app.get('*', (req, res) => {
-  res.status(404).json({"error":"Not fount"});
-  console.log("Not fount");
+  res.status(404).json({"error":"Page not found"});
+  console.log("Page not found");
 });
 
 const listener = app.listen(PORT, () => {
