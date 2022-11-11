@@ -24,19 +24,12 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
       }
       else {
         const additionalParams = req.url?.split(/\[(.*?)\]/).filter(Boolean);
-        const startDate = new Date (additionalParams[1])?.toISOString();
-        const endDate = new Date (additionalParams[2]?.replace('&', '')).toISOString();
-        const limit =  additionalParams[3]?.replace('&', '');
-
-        const exercisesSelect = startDate && endDate && limit ? "SELECT * FROM exercises WHERE _id = ? and date between ? and ?" : "SELECT * FROM exercises where _id = ?" ;
-        const params = startDate && endDate && limit ? [req.params._id, startDate, endDate] : [req.params._id];
-
-        db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
-          if(limit <= 0 || limit > exercisesRow.length || limit === undefined) {
-            res.status(400).json({"error":"Wrong limit"});
-            console.error("Wrong limit");
-          }
-          else {
+        if(additionalParams.length === 1)
+        {
+          const exercisesSelect = "SELECT * FROM exercises where _id = ?" ;
+          const params = [req.params._id];
+  
+          db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
             if (exercisesErr) {
               res.status(400).json({"error":exercisesErr});
               console.error(exercisesErr);
@@ -51,9 +44,6 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
                 duration: exerciseRow.duration,
                 date: new Date(exerciseRow.date).toDateString(),
               }));
-              if(logs.length > limit) {
-                logs = logs.slice(0, limit);
-              }
               let data = {
                 _id: row._id,
                 username: row.username,
@@ -62,8 +52,51 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
               }
               res.json(data);
             }
-          }
-        });
+          });
+        }
+        else if(additionalParams.length > 1)
+        {
+          const startDate = new Date (additionalParams[1])?.toISOString();
+          const endDate = new Date (additionalParams[2]?.replace('&', '')).toISOString();
+          const limit =  additionalParams[3]?.replace('&', '');
+  
+          const exercisesSelect =  "SELECT * FROM exercises WHERE _id = ? and date between ? and ?";
+          const params = [req.params._id, startDate, endDate];
+  
+          db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
+            if(limit <= 0 || limit > exercisesRow.length || limit === undefined) {
+              res.status(400).json({"error":"Wrong limit"});
+              console.error("Wrong limit");
+            }
+            else {
+              if (exercisesErr) {
+                res.status(400).json({"error":exercisesErr});
+                console.error(exercisesErr);
+              }
+              else if(!exercisesRow) {
+                res.status(400).json({"error":"No logs exist"});
+                console.error("No logs exist");
+              }
+              else {
+                let logs = exercisesRow.map((exerciseRow) => ({
+                  description: exerciseRow.description,
+                  duration: exerciseRow.duration,
+                  date: new Date(exerciseRow.date).toDateString(),
+                }));
+                if(logs.length > limit) {
+                  logs = logs.slice(0, limit);
+                }
+                let data = {
+                  _id: row._id,
+                  username: row.username,
+                  count: logs.length,
+                  log: logs,
+                }
+                res.json(data);
+              }
+            }
+          });
+        }
       }
     });
 });
