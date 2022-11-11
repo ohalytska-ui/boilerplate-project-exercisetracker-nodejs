@@ -60,9 +60,9 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
                 duration: exerciseRow.duration,
                 date: new Date(exerciseRow.date).toDateString(),
               }));
-              // if(logs.length > limit) {
-              //   logs = logs.slice(0, limit);
-              // }
+              if(logs.length > limit) {
+                logs = logs.slice(0, limit);
+              }
               let data = {
                 _id: row._id,
                 username: row.username,
