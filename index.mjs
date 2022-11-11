@@ -26,10 +26,10 @@ app.get('/', (req, res) => {
 });
 
 // default response for any other request
-// app.get('*', (req, res) => {
-//   res.status(404).json({"error":"Not fount"});
-//   console.log("Not fount");
-// });
+app.get('*', (req, res) => {
+  res.status(404).json({"error":"Not fount"});
+  console.log("Not fount");
+});
 
 const listener = app.listen(PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port)
