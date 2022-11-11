@@ -64,36 +64,37 @@ logsRoutes.route("/api/users/:_id/logs").get((req, res) => {
           const params = [req.params._id, startDate, endDate];
   
           db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
-            if(limit <= 0 || limit > exercisesRow.length || limit === undefined) {
-              res.status(400).json({"error":"Wrong limit"});
-              console.error("Wrong limit");
+            // if(limit <= 0 || limit > exercisesRow.length || limit === undefined) {
+            //   res.status(400).json({"error":"Wrong limit"});
+            //   console.error("Wrong limit");
+            // }
+            // else {
+              
+            // }
+            if (exercisesErr) {
+              res.status(400).json({"error":exercisesErr});
+              console.error(exercisesErr);
+            }
+            else if(!exercisesRow) {
+              res.status(400).json({"error":"No logs exist"});
+              console.error("No logs exist");
             }
             else {
-              if (exercisesErr) {
-                res.status(400).json({"error":exercisesErr});
-                console.error(exercisesErr);
+              let logs = exercisesRow.map((exerciseRow) => ({
+                description: exerciseRow.description,
+                duration: exerciseRow.duration,
+                date: new Date(exerciseRow.date).toDateString(),
+              }));
+              // if(logs.length > limit) {
+              //   logs = logs.slice(0, limit);
+              // }
+              let data = {
+                _id: row._id,
+                username: row.username,
+                count: logs.length,
+                log: logs,
               }
-              else if(!exercisesRow) {
-                res.status(400).json({"error":"No logs exist"});
-                console.error("No logs exist");
-              }
-              else {
-                let logs = exercisesRow.map((exerciseRow) => ({
-                  description: exerciseRow.description,
-                  duration: exerciseRow.duration,
-                  date: new Date(exerciseRow.date).toDateString(),
-                }));
-                if(logs.length > limit) {
-                  logs = logs.slice(0, limit);
-                }
-                let data = {
-                  _id: row._id,
-                  username: row.username,
-                  count: logs.length,
-                  log: logs,
-                }
-                res.json(data);
-              }
+              res.json(data);
             }
           });
         }
