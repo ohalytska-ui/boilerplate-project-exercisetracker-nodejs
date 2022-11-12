@@ -3,16 +3,13 @@ import cors from 'cors';;
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 
-import { fileURLToPath } from 'url';
-
 import usersRoutes from "./routes/users.mjs";
 import exercisesRoutes from "./routes/exercises.mjs";
 import logsRoutes from "./routes/logs.mjs";
+import mainRouters from "./routes/index.mjs";
 
 // server port
 const PORT = process.env.PORT || 3000;
-// dirname
-const dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // view engine setup
 dotenv.config();
@@ -23,21 +20,11 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// add routes
 app.use(usersRoutes);
 app.use(exercisesRoutes);
 app.use(logsRoutes);
-
-// root endpoint
-app.get('/', (req, res) => {
-  res.sendFile(dirname + '/views/index.html');
-});
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  res.status(404).json({"error":"Page not found"});
-  console.log("Page not found");
-  next("Page not found");
-});
+app.use(mainRouters);
 
 const listener = app.listen(PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port)
