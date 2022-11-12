@@ -1,2 +1,5 @@
-# Dependency directories
+# dependency directories
 node_modules
+
+# testing
+/coverage
