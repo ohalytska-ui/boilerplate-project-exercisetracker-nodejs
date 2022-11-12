@@ -15,7 +15,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
 });
 
 // create users table
-db.run("CREATE TABLE IF NOT EXISTS users (_id TEXT PRIMARY KEY, username text)", (err) => {
+db.run("CREATE TABLE IF NOT EXISTS users (_id TEXT PRIMARY KEY, username text, UNIQUE(username))", (err) => {
   if (err) {
     // cannot open table
     console.error(err);

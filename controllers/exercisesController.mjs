@@ -1,31 +1,31 @@
-import express from 'express';
 import db from '../db/database.mjs';
-import bodyParser from "body-parser";
 
-// exercisesRoutes is an instance of the express router
-const exercisesRoutes = express.Router();
+// exercises controllers
 
-exercisesRoutes.use(bodyParser.urlencoded({ extended: false }));
-exercisesRoutes.use(bodyParser.json());
-
-// insert exercise
-exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
+const addExerciseToUser = (req, res, next) => {
   let errors=[];
+
   if (!req.params._id) {
     errors.push("No id specified!");
   }
+
   if (!req.body.description) {
     errors.push("No description specified!");
   }
+
   if (!req.body.duration) {
     errors.push("No duration specified!");
   }
+
   if (errors.length){
     res.status(400).json({"error":errors.join(",")});
     console.error(errors);
+    return next(errors);
   }
+
   if(req.params._id){
-    const select = "SELECT * FROM users where _id = ?";
+    // named placeholders
+    const select = "SELECT * FROM users where _id = :_id";
     const params = [req.params._id];
   
     db.get(select, params, (err, row) => {
@@ -33,10 +33,12 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
         res.status(400).json({"error":err});
         console.error(err);
       }
+
       else if(!row) {
         res.status(400).json({"error":"No such user"});
         console.error("No such user");
       }
+
       else {
         const data = {
           _id: req.params._id,
@@ -56,16 +58,20 @@ exercisesRoutes.route("/api/users/:_id/exercises").post( (req, res) => {
       
         const insert = "INSERT INTO exercises (_id, username, description, duration, date) VALUES (?,?,?,?,?)";
         const params =[data._id, data.username, data.description, data.duration, data.date];
-        db.run(insert, params, function (err, res) {
+
+        db.run(insert, params, function (err, response) {
           if (err){
             res.status(400).json({"error": err.message});
             console.error(err.message);
           }
+
           res.json(resData);
         });
       }
     });
   };
-});
+};
 
-export default exercisesRoutes;
+export default {
+  addExerciseToUser,
+};
