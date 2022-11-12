@@ -1,6 +1,6 @@
 import express from 'express';
 // Require our controllers.
-import exercisesController from '../controllers/exercisesController.mjs';
+import exercisesController from '../controllers/exercisesController.js';
 
 // usersRoutes is an instance of the express router
 const exercisesRoutes = express.Router();

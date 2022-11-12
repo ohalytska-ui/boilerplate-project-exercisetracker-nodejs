@@ -1,4 +1,4 @@
-import db from '../db/database.mjs';
+import db from '../db/database.js';
 import crypto from "crypto";
 
 // users controllers

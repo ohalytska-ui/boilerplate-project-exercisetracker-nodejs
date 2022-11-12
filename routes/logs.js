@@ -1,6 +1,6 @@
 import express from 'express';
 // Require our controllers.
-import logsController from '../controllers/logsController.mjs';
+import logsController from '../controllers/logsController.js';
 
 // usersRoutes is an instance of the express router
 const logsRoutes = express.Router();

@@ -3,10 +3,10 @@ import cors from 'cors';;
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 
-import usersRoutes from "./routes/users.mjs";
-import exercisesRoutes from "./routes/exercises.mjs";
-import logsRoutes from "./routes/logs.mjs";
-import mainRouters from "./routes/index.mjs";
+import usersRoutes from "./routes/users.js";
+import exercisesRoutes from "./routes/exercises.js";
+import logsRoutes from "./routes/logs.js";
+import mainRouters from "./routes/index.js";
 
 // server port
 const PORT = process.env.PORT || 3000;

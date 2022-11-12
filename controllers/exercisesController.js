@@ -1,4 +1,4 @@
-import db from '../db/database.mjs';
+import db from '../db/database.js';
 
 // exercises controllers
 

@@ -1,6 +1,6 @@
 import express from 'express';
 // Require our controllers.
-import usersController from '../controllers/usersController.mjs';
+import usersController from '../controllers/usersController.js';
 
 // usersRoutes is an instance of the express router
 const usersRoutes = express.Router();
