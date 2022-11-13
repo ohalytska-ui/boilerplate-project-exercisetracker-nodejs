@@ -14,8 +14,8 @@ const getUserById = (req, res, next) => {
       console.error(err);
       next(err);
     } else if (!row) {
-      res.status(400).json({ error: 'No such user' });
-      console.error('No such user');
+      res.status(400).json({ error: 'No such user!' });
+      console.error('No such user!');
     } else {
       res.json(row);
     }
@@ -31,9 +31,6 @@ const getUsers = (req, res, next) => {
       res.status(400).json({ error: err.message });
       console.error(err.message);
       return next(err);
-    } else if (!rows) {
-      res.status(400).json({ error: 'Something wrong with getting all users' });
-      console.error('Something wrong with getting all users');
     } else {
       res.json(rows);
     }
@@ -41,16 +38,6 @@ const getUsers = (req, res, next) => {
 };
 
 const addUser = (req, res, next) => {
-  let errors = [];
-  if (!req.body.username) {
-    errors.push('No username specified!');
-  }
-
-  if (errors.length) {
-    res.status(400).json({ error: errors.join(',') });
-    console.error(errors);
-  }
-
   const data = {
     _id: req.body?._id ?? crypto.randomBytes(20).toString('hex'),
     username: req.body.username,

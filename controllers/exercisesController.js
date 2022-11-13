@@ -5,10 +5,6 @@ import db from '../db/database.js';
 const addExerciseToUser = (req, res, next) => {
   let errors = [];
 
-  if (!req.params._id) {
-    errors.push('No id specified!');
-  }
-
   if (!req.body.description) {
     errors.push('No description specified!');
   }
@@ -33,8 +29,8 @@ const addExerciseToUser = (req, res, next) => {
         res.status(400).json({ error: err });
         console.error(err);
       } else if (!row) {
-        res.status(400).json({ error: 'No such user' });
-        console.error('No such user');
+        res.status(400).json({ error: 'No such user!' });
+        console.error('No such user!');
       } else {
         const data = {
           _id: req.params._id,

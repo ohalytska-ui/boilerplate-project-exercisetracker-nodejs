@@ -26,4 +26,16 @@ describe('users endpoints', () => {
     expect(res.body).have.property('_id').equal(user._id);
     expect(res.body).have.property('username');
   });
+
+  it('it should not GET user by the wrong id', async () => {
+    const res = await request(app).get(`/api/user/noId`);
+    expect(res.status).to.equal(400);
+    expect(res.body.error).to.equal('No such user!');
+  });
+
+  it('it should not POST a new user (with no unique username)', async () => {
+    const res = await request(app).post('/api/users').send({ username: user.username });
+    expect(res.status).to.equal(400);
+    expect(res.body.error).to.equal('SQLITE_CONSTRAINT: UNIQUE constraint failed: users.username');
+  });
 });

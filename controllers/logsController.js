@@ -13,8 +13,8 @@ const getUserLogs = (req, res) => {
       res.status(400).json({ error: err });
       console.error(err);
     } else if (!row) {
-      res.status(400).json({ error: 'No such user' });
-      console.error('No such user');
+      res.status(400).json({ error: 'No such user!' });
+      console.error('No such user!');
     } else {
       if (from ?? to ?? limit) {
         // named placeholders
@@ -31,15 +31,12 @@ const getUserLogs = (req, res) => {
             };
             res.json(dataNoLogs);
           } else if (limit <= 0 || limit > exercisesRow.length) {
-            res.status(400).json({ error: 'Wrong limit' });
-            console.error('Wrong limit');
+            res.status(400).json({ error: 'Wrong limit!' });
+            console.error('Wrong limit!');
           } else {
             if (exercisesErr) {
               res.status(400).json({ error: exercisesErr });
               console.error(exercisesErr);
-            } else if (!exercisesRow) {
-              res.status(400).json({ error: 'No logs exist' });
-              console.error('No logs exist');
             } else {
               let logs = exercisesRow.map((exerciseRow) => ({
                 description: exerciseRow.description,
@@ -73,9 +70,6 @@ const getUserLogs = (req, res) => {
           if (exercisesErr) {
             res.status(400).json({ error: exercisesErr });
             console.error(exercisesErr);
-          } else if (!exercisesRow) {
-            res.status(400).json({ error: 'No logs exist' });
-            console.error('No logs exist');
           } else {
             let logs = exercisesRow.map((exerciseRow) => ({
               description: exerciseRow.description,

@@ -2,6 +2,10 @@
 node_modules
 package-lock.json
 .DS_Store
+npm-debug.log
+/*.env
+
+# vscode
 .vscode
 
 # testing
