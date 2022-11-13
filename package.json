@@ -6,7 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "nodemon index.js",
-		"test": "nodemon --exec c8 mocha --reporter spec './test/**/*.test.js'"
+		"test": "nodemon --exec c8 mocha --reporter spec './tests/**/*.test.js'"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.1",
@@ -17,7 +17,8 @@
 		"nodemon": "^2.0.20",
 		"path": "^0.12.7",
 		"prettier": "^2.7.1",
-		"sqlite3": "^5.1.2"
+		"sqlite3": "^5.1.2",
+		"supertest": "^6.3.1"
 	},
 	"mocha": {
 		"require": "expectations"
@@ -34,9 +35,6 @@
 		"c8": "^7.12.0",
 		"chai": "^4.3.7",
 		"eslint": "^8.27.0",
-		"expectations": "^1.0.0",
-		"mocha": "^10.1.0",
-		"sinon": "^14.0.2",
-		"supertest": "^6.3.1"
+		"mocha": "^10.1.0"
 	}
 }

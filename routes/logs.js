@@ -8,6 +8,6 @@ const logsRoutes = express.Router();
 /// LOGS ROUTES ///
 
 // GET all user logs from db (from, to, limit).
-logsRoutes.get("/api/users/:_id/logs", logsController.getUserLogs);
+logsRoutes.get('/api/users/:_id/logs', logsController.getUserLogs);
 
 export default logsRoutes;

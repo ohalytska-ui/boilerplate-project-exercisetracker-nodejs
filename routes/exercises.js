@@ -8,6 +8,6 @@ const exercisesRoutes = express.Router();
 /// EXERCISES ROUTES ///
 
 // POST all users from db.
-exercisesRoutes.post("/api/users/:_id/exercises", exercisesController.addExerciseToUser);
+exercisesRoutes.post('/api/users/:_id/exercises', exercisesController.addExerciseToUser);
 
 export default exercisesRoutes;

@@ -7,10 +7,13 @@ const usersRoutes = express.Router();
 
 /// USERS ROUTES ///
 
+// GET user by id.
+usersRoutes.get('/api/user/:_id', usersController.getUserById);
+
 // GET all users from db.
-usersRoutes.get("/api/users", usersController.getUsers);
+usersRoutes.get('/api/users', usersController.getUsers);
 
 // POST add new user.
-usersRoutes.post("/api/users", usersController.addUser);
+usersRoutes.post('/api/users', usersController.addUser);
 
 export default usersRoutes;
