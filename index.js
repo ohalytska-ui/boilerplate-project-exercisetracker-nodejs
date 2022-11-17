@@ -1,12 +1,13 @@
 import express from 'express';
-import cors from 'cors';;
+import cors from 'cors';
 import dotenv from 'dotenv';
-import bodyParser from "body-parser";
+import bodyParser from 'body-parser';
 
-import usersRoutes from "./routes/users.js";
-import exercisesRoutes from "./routes/exercises.js";
-import logsRoutes from "./routes/logs.js";
-import mainRouters from "./routes/index.js";
+import usersRoutes from './routes/users.js';
+import exercisesRoutes from './routes/exercises.js';
+import logsRoutes from './routes/logs.js';
+import mainRouters from './routes/index.js';
+import errorRouters from './routes/404.js';
 
 // server port
 const PORT = process.env.PORT || 3000;
@@ -25,9 +26,10 @@ app.use(usersRoutes);
 app.use(exercisesRoutes);
 app.use(logsRoutes);
 app.use(mainRouters);
+app.use(errorRouters);
 
 const listener = app.listen(PORT, () => {
-  console.log('Your app is listening on port ' + listener.address().port)
+  console.log('Your app is listening on port ' + listener.address().port);
 });
 
 export default app;

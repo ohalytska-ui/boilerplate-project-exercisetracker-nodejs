@@ -1,6 +1,6 @@
 // require the dev-dependencies
 import { expect } from 'chai';
-import db from '../db/database.js';
+import db from '../db/db.js';
 
 // mocha & chai
 describe('db', () => {

@@ -36,6 +36,6 @@ describe('users endpoints', () => {
   it('it should not POST a new user (with no unique username)', async () => {
     const res = await request(app).post('/api/users').send({ username: user.username });
     expect(res.status).to.equal(400);
-    expect(res.body.error).to.equal('SQLITE_CONSTRAINT: UNIQUE constraint failed: users.username');
+    expect(res.body.error).to.equal('Not unique username!');
   });
 });

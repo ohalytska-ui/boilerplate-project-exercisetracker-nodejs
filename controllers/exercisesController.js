@@ -1,4 +1,4 @@
-import db from '../db/database.js';
+import db from '../db/db.js';
 
 // exercises controllers
 
@@ -51,7 +51,7 @@ const addExerciseToUser = (req, res, next) => {
         const insert = 'INSERT INTO exercises (_id, username, description, duration, date) VALUES (?,?,?,?,?)';
         const params = [data._id, data.username, data.description, data.duration, data.date];
 
-        db.run(insert, params, function (err, response) {
+        db.run(insert, params, function (err, _) {
           if (err) {
             res.status(400).json({ error: err.message });
             console.error(err.message);

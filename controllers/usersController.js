@@ -1,4 +1,4 @@
-import db from '../db/database.js';
+import db from '../db/db.js';
 import crypto from 'crypto';
 
 // users controllers
@@ -12,7 +12,7 @@ const getUserById = (req, res, next) => {
     if (err) {
       res.status(400).json({ error: err });
       console.error(err);
-      next(err);
+      return next(err);
     } else if (!row) {
       res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
@@ -46,8 +46,12 @@ const addUser = (req, res, next) => {
   const insert = 'INSERT INTO users (_id, username) VALUES (?,?)';
   const params = [data._id, data.username];
 
-  db.run(insert, params, function (err, response) {
-    if (err) {
+  db.run(insert, params, function (err, _) {
+    if (err?.toString()?.includes('UNIQUE')) {
+      res.status(400).json({ error: 'Not unique username!' });
+      console.error('Not unique username!');
+      return next('Not unique username!');
+    } else if (err) {
       res.status(400).json({ error: err.message });
       console.error(err.message);
       return next(err);

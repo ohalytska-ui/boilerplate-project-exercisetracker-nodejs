@@ -1,8 +1,8 @@
-import db from '../db/database.js';
+import db from '../db/db.js';
 
 // logs controllers
 
-const getUserLogs = (req, res) => {
+const getUserLogs = (req, res, next) => {
   // named placeholders
   const select = 'SELECT * FROM users where _id = :_id';
   const params = [req.params._id];
@@ -12,6 +12,7 @@ const getUserLogs = (req, res) => {
     if (err) {
       res.status(400).json({ error: err });
       console.error(err);
+      return next(err);
     } else if (!row) {
       res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
