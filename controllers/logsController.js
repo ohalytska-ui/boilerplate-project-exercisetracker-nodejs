@@ -17,7 +17,7 @@ const getUserLogs = (req, res, next) => {
       res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
     } else {
-      if (from ?? to ?? limit) {
+      if (from && to && limit) {
         // named placeholders
         const exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date between :from and :to';
         const params = [req.params._id, new Date(from).toISOString(), new Date(to).toISOString()];
