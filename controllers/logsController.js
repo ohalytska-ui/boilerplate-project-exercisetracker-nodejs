@@ -31,7 +31,7 @@ const getUserLogs = (req, res, next) => {
               log: [],
             };
             res.json(dataNoLogs);
-          } else if (limit <= 0 || limit > exercisesRow.length) {
+          } else if (limit < 0 || limit > exercisesRow.length) {
             res.status(400).json({ error: 'Wrong limit!' });
             console.error('Wrong limit!');
           } else {
