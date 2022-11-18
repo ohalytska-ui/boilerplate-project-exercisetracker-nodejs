@@ -2,11 +2,13 @@ import express from 'express';
 import path from 'path';
 
 // router is an instance of the express router
-const mainRouters = express.Router();
+const mainRoutes = express.Router();
+
+/// MAIN ROUTES ///
 
 // root endpoint
-mainRouters.get('/', (req, res) => {
+mainRoutes.get('/', (req, res) => {
   res.sendFile(path.resolve('views/index.html'));
 });
 
-export default mainRouters;
+export default mainRoutes;
