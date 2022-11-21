@@ -26,11 +26,13 @@ const addExerciseToUser = (req, res, next) => {
 
     db.get(select, params, (err, row) => {
       if (err) {
-        res.status(400).json({ error: err });
-        console.error(err);
+        res.status(400).json({ error: err.message });
+        console.error(err.message);
+        return next(err.message);
       } else if (!row) {
         res.status(400).json({ error: 'No such user!' });
         console.error('No such user!');
+        return next('No such user!');
       } else {
         const data = {
           _id: req.params._id,
@@ -55,9 +57,11 @@ const addExerciseToUser = (req, res, next) => {
           if (err) {
             res.status(400).json({ error: err.message });
             console.error(err.message);
+            return next(err.message);
           }
 
           res.json(resData);
+          return next(resData);
         });
       }
     });

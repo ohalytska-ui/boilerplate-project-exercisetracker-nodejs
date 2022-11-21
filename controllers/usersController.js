@@ -16,8 +16,10 @@ const getUserById = (req, res, next) => {
     } else if (!row) {
       res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
+      return next('No such user!');
     } else {
       res.json(row);
+      return next(row);
     }
   });
 };
@@ -33,6 +35,7 @@ const getUsers = (req, res, next) => {
       return next(err);
     } else {
       res.json(rows);
+      return next(rows);
     }
   });
 };
@@ -57,6 +60,7 @@ const addUser = (req, res, next) => {
       return next(err);
     }
     res.json(data);
+    return next(data);
   });
 };
 

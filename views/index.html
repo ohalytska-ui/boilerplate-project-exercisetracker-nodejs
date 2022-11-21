@@ -19,7 +19,7 @@
       <form id="exercise-form" method="post">
         <h3>Add exercises</h3>
         <p><code>POST /api/users/:_id/exercises</code></p>
-        <input id="uid" type="text" name=":_id" placeholder=":user_id" />
+        <input id="uid" type="text" name=":_id" placeholder=":user_id*" required />
         <input
           id="desc"
           type="text"
@@ -30,7 +30,12 @@
           required
         />
         <input id="dur" type="number" min="1" max="60" name="duration" placeholder="duration* (mins.)" required />
-        <input id="date" type="date" name="date" placeholder="date (yyyy-mm-dd)" />
+        <input
+          id="date"
+          name="date"
+          placeholder="yyyy-mm-dd"
+          pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
+        />
         <input type="submit" value="Submit" />
       </form>
       <p>
