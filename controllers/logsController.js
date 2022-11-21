@@ -10,9 +10,9 @@ const getUserLogs = (req, res, next) => {
 
   db.get(select, params, (err, row) => {
     if (err) {
-      res.status(400).json({ error: err });
-      console.error(err);
-      return next(err);
+      res.status(400).json({ error: err.message });
+      console.error(err.message);
+      return next(err.message);
     } else if (!row) {
       res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
