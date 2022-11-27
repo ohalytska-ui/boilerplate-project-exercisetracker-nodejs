@@ -104,11 +104,13 @@ const getUserLogs = (req, res, next) => {
               date: new Date(exerciseRow.date).toDateString(),
             }));
 
+            const sortedLogs = logs.sort((objA, objB) => Number(new Date(objA.date)) - Number(new Date(objB.date)));
+
             let data = {
               _id: row._id,
               username: row.username,
-              count: logs.length,
-              log: logs,
+              count: sortedLogs.length,
+              log: sortedLogs,
             };
 
             res.json(data);
