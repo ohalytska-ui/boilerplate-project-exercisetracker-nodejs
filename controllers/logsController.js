@@ -18,28 +18,41 @@ const getUserLogs = (req, res, next) => {
       console.error('No such user!');
       return next('No such user');
     } else {
-      if (from && to && limit) {
+      if (from || to || limit) {
         // regx for corrrect data format
         const regx = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-        if (!regx.test(from) && !regx.test(to)) {
+        if (from && !regx.test(from) && to && !regx.test(to)) {
           res.status(400).json({ error: "Wrong 'from' and 'to' date format! Valid data format is 'yyyy-mm-dd'" });
           console.error("Wrong 'from' and 'to' date format! Valid data format is 'yyyy-mm-dd'");
           return next("Wrong 'from' and 'to' date format! Valid data format is 'yyyy-mm-dd'");
         }
-        if (!regx.test(from)) {
+        if (from && !regx.test(from)) {
           res.status(400).json({ error: "Wrong 'from' date format! Valid data format is 'yyyy-mm-dd'" });
           console.error("Wrong 'from' date format! Valid data format is 'yyyy-mm-dd'");
           return next("Wrong 'from' date format! Valid data format is 'yyyy-mm-dd'");
         }
-        if (!regx.test(to)) {
+        if (to && !regx.test(to)) {
           res.status(400).json({ error: "Wrong 'to' date format! Valid data format is 'yyyy-mm-dd'" });
           console.error("Wrong 'to' date format! Valid data format is 'yyyy-mm-dd'");
           return next("Wrong  'to' date format! Valid data format is 'yyyy-mm-dd'");
         }
-        if (regx.test(from) && regx.test(to)) {
+        if (regx.test(from) || regx.test(to) || limit) {
           // named placeholders
-          const exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date between :from and :to';
-          const params = [req.params._id, new Date(from).toISOString(), new Date(to).toISOString()];
+          let exercisesSelect = '';
+          let params = [];
+          if (to && from) {
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date between :from and :to';
+            params = [req.params._id, new Date(from)?.toISOString(), new Date(to)?.toISOString()];
+          } else if (to) {
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date < :to';
+            params = [req.params._id, new Date(to)?.toISOString()];
+          } else if (from) {
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date > :from';
+            params = [req.params._id, new Date(from)?.toISOString()];
+          } else if (limit && !from && !to) {
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id';
+            params = [req.params._id];
+          }
 
           db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
             if (exercisesRow.length === 0) {
@@ -50,6 +63,7 @@ const getUserLogs = (req, res, next) => {
                 log: [],
               };
               res.json(dataNoLogs);
+              return next(dataNoLogs);
             } else if (limit < 0 || limit > exercisesRow.length) {
               res.status(400).json({ error: 'Wrong limit!' });
               console.error('Wrong limit!');
@@ -75,8 +89,8 @@ const getUserLogs = (req, res, next) => {
                 let data = {
                   _id: row._id,
                   username: row.username,
-                  from: new Date(from).toDateString(),
-                  to: new Date(to).toDateString(),
+                  from: from ? new Date(from).toDateString() : 'No date',
+                  to: to ? new Date(to).toDateString() : 'No date',
                   count: sortedLogs.length,
                   log: sortedLogs,
                 };
