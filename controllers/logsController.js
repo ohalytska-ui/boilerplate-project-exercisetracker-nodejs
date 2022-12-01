@@ -19,7 +19,7 @@ const getUserLogs = (req, res, next) => {
       return next('No such user');
     } else {
       const regx = /^[1-9][0-9]*$/;
-      if (!regx.test(limit)) {
+      if (limit && !regx.test(limit)) {
         res.status(400).json({ error: 'Wrong limit!' });
         console.error('Wrong limit!');
         return next('Wrong limit!');
