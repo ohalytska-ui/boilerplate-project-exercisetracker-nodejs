@@ -18,7 +18,11 @@ const getUserLogs = (req, res, next) => {
       console.error('No such user!');
       return next('No such user');
     } else {
-      if (from || to || limit) {
+      if (limit < 0) {
+        res.status(400).json({ error: 'Wrong limit!' });
+        console.error('Wrong limit!');
+        return next('Wrong limit!');
+      } else if (from || to || limit) {
         // regx for corrrect data format
         const regx = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
         if (from && !regx.test(from) && to && !regx.test(to)) {
@@ -41,13 +45,13 @@ const getUserLogs = (req, res, next) => {
           let exercisesSelect = '';
           let params = [];
           if (to && from) {
-            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date between :from and :to';
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id AND date >= :from AND date <= :to';
             params = [req.params._id, new Date(from)?.toISOString(), new Date(to)?.toISOString()];
           } else if (to) {
-            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date < :to';
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id AND date <= :to';
             params = [req.params._id, new Date(to)?.toISOString()];
           } else if (from) {
-            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id and date > :from';
+            exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id AND date >= :from';
             params = [req.params._id, new Date(from)?.toISOString()];
           } else if (limit && !from && !to) {
             exercisesSelect = 'SELECT * FROM exercises WHERE _id = :_id';
@@ -64,7 +68,8 @@ const getUserLogs = (req, res, next) => {
               };
               res.json(dataNoLogs);
               return next(dataNoLogs);
-            } else if (limit < 0 || limit > exercisesRow.length) {
+            }
+            if (limit > exercisesRow.length) {
               res.status(400).json({ error: 'Wrong limit!' });
               console.error('Wrong limit!');
               return next('Wrong limit!');
