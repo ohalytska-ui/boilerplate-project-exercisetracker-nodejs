@@ -1,0 +1,17 @@
+<%- include('includes/head.ejs') %>
+
+<div class="container">
+  <h1><%= title %></h1>
+  <ul>
+    <h3>All users list</h3>
+    <p><code>GET /api/users</code></p>
+    <% users.forEach((user)=> { %>
+    <li>
+      <p><strong>_id:</strong> <%= user._id %></p>
+      <p><strong>username:</strong> <%= user.username %></p>
+    </li>
+    <% }) %>
+  </ul>
+</div>
+
+<%- include('includes/end.ejs') %>

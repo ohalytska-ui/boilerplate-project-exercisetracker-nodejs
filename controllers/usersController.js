@@ -10,31 +10,44 @@ const getUserById = (req, res, next) => {
 
   db.get(select, params, (err, row) => {
     if (err) {
-      res.status(400).json({ error: err });
       console.error(err.message);
+      res.render('error', {
+        title: JSON.stringify(err.message),
+      });
       return next(err.message);
     } else if (!row) {
-      res.status(400).json({ error: 'No such user!' });
       console.error('No such user!');
+      res.render('error', {
+        title: 'No such user',
+      });
       return next('No such user!');
     } else {
-      res.json(row);
-      return next(row);
+      res.render('user', {
+        title: 'Exercise tracker',
+        code: 'GET /api/user/:_id',
+        username: row.username,
+        id: row._id,
+      });
     }
   });
 };
 
-const getUsers = (req, res, next) => {
+const getUsers = (_, res, next) => {
   const select = 'SELECT * FROM users';
   let params = [];
 
   db.all(select, params, (err, rows) => {
     if (err) {
-      res.status(400).json({ error: err.message });
       console.error(err.message);
+      res.render('error', {
+        title: JSON.stringify(err.message),
+      });
       return next(err.message);
     } else {
-      res.json(rows);
+      res.render('users', {
+        title: 'Exercise tracker',
+        users: rows,
+      });
     }
   });
 };
@@ -50,16 +63,24 @@ const addUser = (req, res, next) => {
 
   db.run(insert, params, function (err, _) {
     if (err?.toString()?.includes('UNIQUE')) {
-      res.status(400).json({ error: 'Not unique username!' });
       console.error('Not unique username!');
+      res.render('error', {
+        title: 'Not unique username!',
+      });
       return next('Not unique username!');
     } else if (err) {
-      res.status(400).json({ error: err.message });
       console.error(err.message);
+      res.render('error', {
+        title: JSON.stringify(err.message),
+      });
       return next(err.message);
     }
-    res.json(data);
-    return next(data);
+    res.render('user', {
+      title: 'Exercise tracker',
+      code: 'POST /api/users',
+      username: data.username,
+      id: data._id,
+    });
   });
 };
 

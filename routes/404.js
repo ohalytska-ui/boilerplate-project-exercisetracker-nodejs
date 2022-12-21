@@ -7,8 +7,10 @@ const notFound = express.Router();
 /// ERRORS ROUTES ///
 
 // catch 404 and forward to error handler
-notFound.use(function (req, res, next) {
-  res.status(404).json({ error: 'Page not found' });
+notFound.use(function (_, res, next) {
+  res.render('error', {
+    title: 'Page not found!',
+  });
   return next(createError(404));
 });
 

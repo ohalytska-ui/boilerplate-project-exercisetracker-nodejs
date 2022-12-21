@@ -14,7 +14,9 @@ const addExerciseToUser = (req, res, next) => {
   }
 
   if (errors.length) {
-    res.status(400).json({ error: errors.join(',') });
+    res.render('error', {
+      title: JSON.stringify(errors.join(',')),
+    });
     console.error(errors);
     return next(errors);
   }
@@ -26,11 +28,15 @@ const addExerciseToUser = (req, res, next) => {
 
     db.get(select, params, (err, row) => {
       if (err) {
-        res.status(400).json({ error: err.message });
+        res.render('error', {
+          title: JSON.stringify(err.message),
+        });
         console.error(err.message);
         return next(err.message);
       } else if (!row) {
-        res.status(400).json({ error: 'No such user!' });
+        res.render('error', {
+          title: 'No such user!',
+        });
         console.error('No such user!');
         return next('No such user!');
       } else {
@@ -55,13 +61,20 @@ const addExerciseToUser = (req, res, next) => {
 
         db.run(insert, params, function (err, _) {
           if (err) {
-            res.status(400).json({ error: err.message });
+            res.render('error', {
+              title: JSON.stringify(err.message),
+            });
             console.error(err.message);
             return next(err.message);
           }
-
-          res.json(resData);
-          return next(resData);
+          res.render('exercise', {
+            title: 'Exercise tracker',
+            id: resData._id,
+            date: resData.date,
+            username: resData.username,
+            description: resData.description,
+            duration: resData.duration,
+          });
         });
       }
     });

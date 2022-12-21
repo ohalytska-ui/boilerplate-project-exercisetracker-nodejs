@@ -12,16 +12,18 @@ import mainRoutes from './routes/index.js';
 import errorRoutes from './routes/404.js';
 
 // server port
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // view engine setup
 dotenv.config();
 const app = express();
 
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(compression()); // Compress all routes
 
 // add routes
