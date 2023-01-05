@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
 export const user = {
-  _id: crypto.randomBytes(20).toString('hex'),
-  username: crypto.randomBytes(20).toString('hex'),
+  _id: crypto.randomBytes(4).toString('hex'),
+  username: crypto.randomBytes(4).toString('hex'),
 };

@@ -10,12 +10,14 @@ const getUserLogs = (req, res, next) => {
 
   db.get(select, params, (err, row) => {
     if (err) {
+      res.status(400);
       res.render('error', {
         title: JSON.stringify(err.message),
       });
       console.error(err.message);
       return next(err.message);
     } else if (!row) {
+      res.status(400);
       res.render('error', {
         title: 'No such user!',
       });
@@ -24,6 +26,7 @@ const getUserLogs = (req, res, next) => {
     } else {
       const regx = /^[1-9][0-9]*$/;
       if (limit && !regx.test(limit)) {
+        res.status(400);
         res.render('error', {
           title: 'Wrong limit!',
         });
@@ -33,6 +36,7 @@ const getUserLogs = (req, res, next) => {
         // regx for corrrect data format
         const regx = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
         if (from && !regx.test(from) && to && !regx.test(to)) {
+          res.status(400);
           res.render('error', {
             title: "Wrong 'from' and 'to' date format! Valid data format is 'yyyy-mm-dd'",
           });
@@ -40,6 +44,7 @@ const getUserLogs = (req, res, next) => {
           return next("Wrong 'from' and 'to' date format! Valid data format is 'yyyy-mm-dd'");
         }
         if (from && !regx.test(from)) {
+          res.status(400);
           res.render('error', {
             title: "Wrong 'from' date format! Valid data format is 'yyyy-mm-dd'",
           });
@@ -47,6 +52,7 @@ const getUserLogs = (req, res, next) => {
           return next("Wrong 'from' date format! Valid data format is 'yyyy-mm-dd'");
         }
         if (to && !regx.test(to)) {
+          res.status(400);
           res.render('error', {
             title: "Wrong 'to' date format! Valid data format is 'yyyy-mm-dd'",
           });
@@ -88,6 +94,7 @@ const getUserLogs = (req, res, next) => {
               return next(dataNoLogs);
             }
             if (limit > exercisesRow.length) {
+              res.status(400);
               res.render('error', {
                 title: 'Wrong limit!',
               });
@@ -95,6 +102,7 @@ const getUserLogs = (req, res, next) => {
               return next('Wrong limit!');
             } else {
               if (exercisesErr) {
+                res.status(400);
                 res.render('error', {
                   title: JSON.stringify(exercisesErr),
                 });
@@ -139,6 +147,7 @@ const getUserLogs = (req, res, next) => {
 
         db.all(exercisesSelect, params, (exercisesErr, exercisesRow) => {
           if (exercisesErr) {
+            res.status(400);
             res.render('error', {
               title: JSON.stringify(exercisesErr),
             });

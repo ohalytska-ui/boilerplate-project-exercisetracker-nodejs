@@ -14,6 +14,7 @@ const addExerciseToUser = (req, res, next) => {
   }
 
   if (errors.length) {
+    res.status(400);
     res.render('error', {
       title: JSON.stringify(errors.join(',')),
     });
@@ -28,12 +29,14 @@ const addExerciseToUser = (req, res, next) => {
 
     db.get(select, params, (err, row) => {
       if (err) {
+        res.status(400);
         res.render('error', {
           title: JSON.stringify(err.message),
         });
         console.error(err.message);
         return next(err.message);
       } else if (!row) {
+        res.status(400);
         res.render('error', {
           title: 'No such user!',
         });
@@ -61,6 +64,7 @@ const addExerciseToUser = (req, res, next) => {
 
         db.run(insert, params, function (err, _) {
           if (err) {
+            res.status(400);
             res.render('error', {
               title: JSON.stringify(err.message),
             });

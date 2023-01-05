@@ -11,12 +11,14 @@ const getUserById = (req, res, next) => {
   db.get(select, params, (err, row) => {
     if (err) {
       console.error(err.message);
+      res.status(400);
       res.render('error', {
         title: JSON.stringify(err.message),
       });
       return next(err.message);
     } else if (!row) {
       console.error('No such user!');
+      res.status(400);
       res.render('error', {
         title: 'No such user',
       });
@@ -39,6 +41,7 @@ const getUsers = (_, res, next) => {
   db.all(select, params, (err, rows) => {
     if (err) {
       console.error(err.message);
+      res.status(400);
       res.render('error', {
         title: JSON.stringify(err.message),
       });
@@ -61,27 +64,37 @@ const addUser = (req, res, next) => {
   const insert = 'INSERT INTO users (_id, username) VALUES (?,?)';
   const params = [data._id, data.username];
 
-  db.run(insert, params, function (err, _) {
-    if (err?.toString()?.includes('UNIQUE')) {
-      console.error('Not unique username!');
-      res.render('error', {
-        title: 'Not unique username!',
+  if (data?.username) {
+    db.run(insert, params, function (err, _) {
+      if (err?.toString()?.includes('UNIQUE')) {
+        console.error('Not unique username!');
+        res.status(400);
+        res.render('error', {
+          title: 'Not unique username!',
+        });
+        return next('Not unique username!');
+      } else if (err) {
+        console.error(err.message);
+        res.status(400);
+        res.render('error', {
+          title: JSON.stringify(err.message),
+        });
+        return next(err.message);
+      }
+      res.render('user', {
+        title: 'Exercise tracker',
+        code: 'POST /api/users',
+        username: data.username,
+        id: data._id,
       });
-      return next('Not unique username!');
-    } else if (err) {
-      console.error(err.message);
-      res.render('error', {
-        title: JSON.stringify(err.message),
-      });
-      return next(err.message);
-    }
-    res.render('user', {
-      title: 'Exercise tracker',
-      code: 'POST /api/users',
-      username: data.username,
-      id: data._id,
     });
-  });
+  } else {
+    console.error('No username!');
+    res.status(400);
+    res.render('error', {
+      title: 'No username!',
+    });
+  }
 };
 
 export default {
